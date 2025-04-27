@@ -11,10 +11,6 @@ const keyboard = document.getElementById("keyboard");
 const messageEl = document.getElementById("message");
 const restartBtn = document.getElementById("restart-btn");
 
-
-// script.js
-const WORDS = [/* your 500 words array */];
-
 // Get daily seed based on EST midnight
 function getDailySeed() {
   const now = new Date();
