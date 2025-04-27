@@ -1,16 +1,3 @@
-// German 5-letter words
-const WORDS = [
-    "apfel", "banane", "birne", "dachs", "eimer", "fabel", "gabel", "hafer", 
-    "igeln", "jacht", "kabel", "lache", "mango", "nadel", "olive", "panda", 
-    "quark", "radar", "safari", "tabak", "ufer", "vogel", "wagon", "xylofon", 
-    "yacht", "zebra", "anker", "boden", "creme", "dolch", "eiche", "fisch", 
-    "geist", "hirte", "insel", "junge", "kiste", "later", "maus", "nacht", 
-    "opfer", "pilot", "quell", "ratte", "socke", "tiger", "uhr", "vater", 
-    "wolke", "zange", "biene", "daten", "ernte", "faden", "gummi", "honig", 
-    "ideen", "jacke", "kamin", "linse", "maske", "nagel", "orkan", "pferd", 
-    "quilt", "rauch", "sonne", "tafel", "umzug", "vogel", "wiese", "zebra"
-];
-
 // Valid guesses (could be larger than WORDS)
 const VALID_GUESSES = [...WORDS];
 
@@ -26,28 +13,6 @@ const keyboard = document.getElementById("keyboard");
 const messageEl = document.getElementById("message");
 const restartBtn = document.getElementById("restart-btn");
 
-
-async function loadWordList() {
-    try {
-      const response = await fetch('five_letter_words_german.txt');
-      if (!response.ok) throw new Error("Failed to load word list");
-      
-      const text = await response.text();
-      WORDS = text.split('\n')
-        .map(word => word.trim().toLowerCase()) // Double-check length
-      
-      if (WORDS.length === 0) throw new Error("No valid words found");
-      
-      initGame(); // Start game after loading
-    } catch (error) {
-      console.error("Error loading word list:", error);
-      messageEl.textContent = "Error loading word list. Please try again later.";
-      // Fallback to a small local array if needed
-      WORDS = ["apfel", "banjo", "creme", "dachs", "engel"];
-      initGame();
-    }
-  }
-  
 
 function initGame() {
     // Select a random word
@@ -247,4 +212,4 @@ function updateKeyboard() {
 }
 
 // Start the game
-loadWordList();
+initGame();
