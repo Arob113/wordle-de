@@ -57,16 +57,20 @@ function createKeyboard() {
         row.forEach(key => {
             const keyEl = document.createElement("button");
             keyEl.className = "key";
-            keyEl.textContent = key;
             keyEl.dataset.key = key;
             
+            // Special handling for Enter and Backspace
             if (key === "Enter") {
                 keyEl.classList.add("key-enter");
+                keyEl.textContent = "Enter";
             } else if (key === "Backspace") {
                 keyEl.classList.add("key-backspace");
                 keyEl.innerHTML = "⌫"; // Backspace symbol
-            } else if (key.length > 1) {
-                keyEl.classList.add("key-wide");
+            } else {
+                keyEl.textContent = key;
+                if (key.length > 1) { // For special characters like Ü, Ö, Ä
+                    keyEl.classList.add("key-wide");
+                }
             }
             
             keyEl.addEventListener("click", () => handleKeyPress(key));
