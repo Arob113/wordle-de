@@ -1,5 +1,3 @@
-// Valid guesses (could be larger than WORDS)
-const VALID_GUESSES = [...WORDS];
 
 // Game state
 let targetWord = "";
@@ -119,7 +117,7 @@ function updateBoard() {
 
 // Submit a guess
 function submitGuess() {
-    if (!VALID_GUESSES.includes(currentGuess)) {
+    if (!WORDS.includes(currentGuess)) {
         messageEl.textContent = "Wort nicht im Wörterbuch";
         return;
     }
