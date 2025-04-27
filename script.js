@@ -216,6 +216,17 @@ function submitGuess() {
     if (currentGuess === targetWord) {
         messageEl.textContent = `Gewonnen! Das Wort war ${targetWord.toUpperCase()}`;
         gameOver = true;
+
+
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = 'Copy Results';
+        copyBtn.className = 'copy-btn';
+        copyBtn.addEventListener('click', copyResultsToClipboard);
+  
+        messageEl.appendChild(document.createElement('br'));
+        messageEl.appendChild(copyBtn);
+
+
     } else if (guesses.length === 6) {
         messageEl.textContent = `Verloren! Das Wort war ${targetWord.toUpperCase()}`;
         gameOver = true;
@@ -263,6 +274,47 @@ function updateKeyboard() {
             key.dataset.state = keyStates[letter];
         }
     }
+}
+// Function to copy results
+function copyResultsToClipboard() {
+    const resultString = generateResultString();
+    
+    navigator.clipboard.writeText(resultString).then(() => {
+      const copyBtn = document.querySelector('.copy-btn');
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy Results';
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = generateResultString();
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      
+      const copyBtn = document.querySelector('.copy-btn');
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy Results';
+      }, 2000);
+    });
+  }
+  
+  // Generate shareable result string
+function generateResultString() {
+    const title = `Wordle de ${getESTDateKey()} - ${guesses.length}/6\n`;
+    const grid = guesses.map(guess => {
+      return guess.split('').map((letter, i) => {
+        if (targetWord[i] === letter) return '🟩';
+        if (targetWord.includes(letter)) return '🟨';
+        return '⬛';
+      }).join('');
+    }).join('\n');
+    
+    return `${title}${grid}\n\nPlay at: ${window.location.href}`;
 }
 
 // Start the game
