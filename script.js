@@ -34,8 +34,7 @@ async function loadWordList() {
       
       const text = await response.text();
       WORDS = text.split('\n')
-        .map(word => word.trim().toLowerCase())
-        .filter(word => word.length === 5); // Double-check length
+        .map(word => word.trim().toLowerCase()) // Double-check length
       
       if (WORDS.length === 0) throw new Error("No valid words found");
       
