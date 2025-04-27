@@ -26,7 +26,30 @@ const keyboard = document.getElementById("keyboard");
 const messageEl = document.getElementById("message");
 const restartBtn = document.getElementById("restart-btn");
 
-// Initialize the game
+
+async function loadWordList() {
+    try {
+      const response = await fetch('five_letter_words_german.txt');
+      if (!response.ok) throw new Error("Failed to load word list");
+      
+      const text = await response.text();
+      WORDS = text.split('\n')
+        .map(word => word.trim().toLowerCase())
+        .filter(word => word.length === 5); // Double-check length
+      
+      if (WORDS.length === 0) throw new Error("No valid words found");
+      
+      initGame(); // Start game after loading
+    } catch (error) {
+      console.error("Error loading word list:", error);
+      messageEl.textContent = "Error loading word list. Please try again later.";
+      // Fallback to a small local array if needed
+      WORDS = ["apfel", "banjo", "creme", "dachs", "engel"];
+      initGame();
+    }
+  }
+  
+
 function initGame() {
     // Select a random word
     targetWord = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -225,4 +248,4 @@ function updateKeyboard() {
 }
 
 // Start the game
-initGame();
+loadWordList();
