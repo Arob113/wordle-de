@@ -12,9 +12,65 @@ const messageEl = document.getElementById("message");
 const restartBtn = document.getElementById("restart-btn");
 
 
+// script.js
+const WORDS = [/* your 500 words array */];
+
+// Get daily seed based on EST midnight
+function getDailySeed() {
+  const now = new Date();
+  const estOffset = -5 * 60 * 60 * 1000; // EST is UTC-5
+  const estTime = new Date(now.getTime() + estOffset);
+  const midnightEST = new Date(estTime);
+  midnightEST.setHours(0, 0, 0, 0);
+  return Math.floor(midnightEST.getTime() / 86400000); // Days since epoch
+}
+
+// Get today's target word
+function getTodaysWord() {
+  const seed = getDailySeed();
+  const index = seed % WORDS.length;
+  return WORDS[index];
+}
+
+// Check if it's a new day (for page refreshes)
+function checkForNewDay() {
+  const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+  const today = getDailySeed().toString();
+  
+  if (lastPlayedDate !== today) {
+    localStorage.setItem('lastPlayedDate', today);
+    initGame(); // Reset game for new day
+  }
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  checkForNewDay();
+  
+  // Optional: Add a timer showing next word change
+  updateDailyTimer();
+  setInterval(updateDailyTimer, 60000);
+});
+
+// Show time until next word change
+function updateDailyTimer() {
+  const now = new Date();
+  const estTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000) - (5 * 3600000));
+  const nextMidnight = new Date(estTime);
+  nextMidnight.setDate(nextMidnight.getDate() + 1);
+  nextMidnight.setHours(0, 0, 0, 0);
+  
+  const diff = nextMidnight - estTime;
+  const hours = Math.floor(diff / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  
+  document.getElementById('daily-timer').textContent = 
+    `Next word in: ${hours}h ${minutes}m`;
+}
+
 function initGame() {
     // Select a random word
-    targetWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+    targetWord = getTodaysWord();
     console.log(targetWord)
     currentGuess = "";
     guesses = [];
