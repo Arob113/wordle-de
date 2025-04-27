@@ -5,12 +5,12 @@ body {
     background-color: #f3f3f3;
     margin: 0;
     padding: 10px;
-    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
+    -webkit-text-size-adjust: 100%;
 }
 
 h1 {
     color: #333;
-    font-size: clamp(1.5rem, 6vw, 2rem); /* Responsive font size */
+    font-size: clamp(1.5rem, 6vw, 2rem);
     margin: 0.5em 0;
 }
 
@@ -30,7 +30,7 @@ h1 {
     margin: 1em auto;
     max-width: 350px;
     width: 100%;
-    aspect-ratio: 5/6; /* Maintain board proportions */
+    aspect-ratio: 5/6;
 }
 
 .row {
@@ -43,12 +43,12 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: clamp(1.5rem, 8vw, 2rem); /* Responsive font size */
+    font-size: clamp(1.5rem, 8vw, 2rem);
     font-weight: bold;
     background-color: #ddd;
     border: 2px solid #bbb;
     text-transform: uppercase;
-    aspect-ratio: 1/1; /* Square tiles */
+    aspect-ratio: 1/1;
     user-select: none;
 }
 
@@ -72,7 +72,6 @@ h1 {
 }
 
 /* Keyboard Styles */
-/* Updated Keyboard Styles */
 .keyboard {
     display: flex;
     flex-direction: column;
@@ -114,28 +113,26 @@ h1 {
     transform: scale(0.95);
 }
 
+/* Special Key Styling */
 .key-wide {
     flex: 1.5;
     font-size: 0.75rem;
-    padding: 0 5px;
 }
 
-.key-extra-wide {
-    flex: 2;
-    font-size: 0.75rem;
+.key-enter {
+    flex: 2.2;
+    font-size: 0.9rem;
+    background-color: #6aaa64; /* Green color */
+    color: white;
+    text-transform: none;
 }
 
 .key-backspace {
+    flex: 1.8;
     font-size: 1.5rem;
 }
 
-/* Special key styling */
-.key-enter {
-    background-color: #818384;
-    color: white;
-}
-
-/* Key states */
+/* Key States */
 .key[data-state="correct"] {
     background-color: #6aaa64;
     color: white;
@@ -149,31 +146,6 @@ h1 {
 .key[data-state="absent"] {
     background-color: #787c7e;
     color: white;
-}
-
-/* Mobile adjustments */
-@media (max-width: 500px) {
-    .keyboard {
-        gap: 4px;
-        padding: 5px;
-    }
-    
-    .key {
-        height: 50px;
-        font-size: 1rem;
-        min-width: 25px;
-    }
-    
-    .key-wide {
-        font-size: 0.65rem;
-    }
-}
-
-@media (max-width: 400px) {
-    .key {
-        height: 45px;
-        font-size: 0.9rem;
-    }
 }
 
 /* Message & Button Styles */
@@ -198,39 +170,31 @@ h1 {
     display: block;
 }
 
-/* Media Queries for Larger Screens */
-@media (min-width: 768px) {
-    .game-container {
-        max-width: 500px;
-    }
-    
+/* Responsive Adjustments */
+@media (max-width: 500px) {
     .key {
-        height: 3.5em;
-        max-width: 3em;
+        height: 50px;
+        font-size: 1rem;
+        min-width: 8px;
     }
     
-    .key-wide {
-        max-width: 5em;
+    .key-enter {
+        font-size: 0.7rem;
+    }
+    
+    .key-backspace {
+        font-size: 1.2rem;
     }
 }
 
-/* Portrait Orientation Adjustments */
-@media (max-height: 600px) and (orientation: portrait) {
-    .board {
-        max-width: 300px;
-        margin: 0.5em auto;
-    }
-    
-    .keyboard {
-        margin: 0.5em auto;
-    }
-    
-    .tile {
-        font-size: clamp(1.2rem, 6vw, 1.5rem);
+@media (max-width: 400px) {
+    .key {
+        height: 45px;
+        font-size: 0.9rem;
     }
 }
 
-/* Landscape Orientation Adjustments */
+/* Landscape Mode Adjustments */
 @media (orientation: landscape) and (max-height: 500px) {
     .game-container {
         display: flex;
