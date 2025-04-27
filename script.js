@@ -48,7 +48,7 @@ function createKeyboard() {
         ["Enter", "Y", "X", "C", "V", "B", "N", "M", "Backspace"]
     ];
 
-    keyboard.innerHTML = "";
+    keyboard.innerHTML = '';
     
     keyboardLayout.forEach(row => {
         const keyboardRow = document.createElement("div");
@@ -60,13 +60,13 @@ function createKeyboard() {
             keyEl.textContent = key;
             keyEl.dataset.key = key;
             
-            if (key.length > 1) {
-                if (key === "Enter") {
-                    keyEl.classList.add("key-extra-wide", "key-enter");
-                } else {
-                    keyEl.classList.add("key-wide", "key-backspace");
-                    keyEl.innerHTML = "⌫"; // Backspace symbol
-                }
+            if (key === "Enter") {
+                keyEl.classList.add("key-enter");
+            } else if (key === "Backspace") {
+                keyEl.classList.add("key-backspace");
+                keyEl.innerHTML = "⌫"; // Backspace symbol
+            } else if (key.length > 1) {
+                keyEl.classList.add("key-wide");
             }
             
             keyEl.addEventListener("click", () => handleKeyPress(key));
