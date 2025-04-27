@@ -49,43 +49,47 @@ function initGame() {
         board.appendChild(row);
     }
 
-    // Create keyboard
-    keyboard.innerHTML = "";
+    createKeyboard();
+    
+    // Add event listeners
+    document.addEventListener("keydown", handleKeyDown);
+    restartBtn.addEventListener("click", initGame);
+}
+
+function createKeyboard() {
     const keyboardLayout = [
         ["Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P", "Ü"],
         ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ö", "Ä"],
         ["Enter", "Y", "X", "C", "V", "B", "N", "M", "Backspace"]
     ];
 
+    keyboard.innerHTML = "";
+    
     keyboardLayout.forEach(row => {
         const keyboardRow = document.createElement("div");
         keyboardRow.className = "keyboard-row";
+        
         row.forEach(key => {
-            const keyEl = document.createElement("div");
+            const keyEl = document.createElement("button");
             keyEl.className = "key";
+            keyEl.textContent = key;
+            keyEl.dataset.key = key;
+            
             if (key.length > 1) {
-                keyEl.classList.add("key-wide");
-                if (key === "Backspace") {
-                    keyEl.classList.add("key-backspace");
-                    keyEl.innerHTML = "&#9003;"; // Left arrow symbol
-                    // Alternative options:
-                    // "⌫" - Standard backspace symbol
-                    // "&#9003;" - Alternative backspace symbol
+                if (key === "Enter") {
+                    keyEl.classList.add("key-extra-wide", "key-enter");
+                } else {
+                    keyEl.classList.add("key-wide", "key-backspace");
+                    keyEl.innerHTML = "⌫"; // Backspace symbol
                 }
             }
-            if (key !== "Backspace") {
-                keyEl.textContent = key;
-            }
-            keyEl.dataset.key = key;
+            
             keyEl.addEventListener("click", () => handleKeyPress(key));
             keyboardRow.appendChild(keyEl);
         });
+        
         keyboard.appendChild(keyboardRow);
     });
-
-    // Add event listeners
-    document.addEventListener("keydown", handleKeyDown);
-    restartBtn.addEventListener("click", initGame);
 }
 
 // Handle keyboard input
