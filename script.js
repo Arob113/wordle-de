@@ -21,6 +21,13 @@ function getDailySeed() {
   return Math.floor(midnightEST.getTime() / 86400000); // Days since epoch
 }
 
+function getESTDateKey() {
+    const now = new Date();
+    // Convert to EST (UTC-5)
+    const estTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000) - (5 * 3600000));
+    return estTime.toISOString().split('T')[0]; // YYYY-MM-DD format
+  }
+
 // Get today's target word
 function getTodaysWord() {
   const seed = getDailySeed();
@@ -217,15 +224,18 @@ function submitGuess() {
         messageEl.textContent = `Gewonnen! Das Wort war ${targetWord.toUpperCase()}`;
         gameOver = true;
 
-
+        const copyContainer = document.createElement('div');
+        copyContainer.className = 'copy-results-container';
+  
         const copyBtn = document.createElement('button');
         copyBtn.textContent = 'Copy Results';
-        copyBtn.className = 'copy-btn';
+        copyBtn.className = 'copy-results-btn';
         copyBtn.addEventListener('click', copyResultsToClipboard);
-  
-        messageEl.appendChild(document.createElement('br'));
-        messageEl.appendChild(copyBtn);
-
+        
+        copyContainer.appendChild(copyBtn);
+        
+        // Insert after the game board
+        board.parentNode.insertBefore(copyContainer, board.nextSibling);
 
     } else if (guesses.length === 6) {
         messageEl.textContent = `Verloren! Das Wort war ${targetWord.toUpperCase()}`;
