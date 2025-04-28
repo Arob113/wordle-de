@@ -49,27 +49,7 @@ function checkForNewDay() {
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
   checkForNewDay();
-  
-  // Optional: Add a timer showing next word change
-  updateDailyTimer();
-  setInterval(updateDailyTimer, 60000);
 });
-
-// Show time until next word change
-function updateDailyTimer() {
-  const now = new Date();
-  const estTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000) - (5 * 3600000));
-  const nextMidnight = new Date(estTime);
-  nextMidnight.setDate(nextMidnight.getDate() + 1);
-  nextMidnight.setHours(0, 0, 0, 0);
-  
-  const diff = nextMidnight - estTime;
-  const hours = Math.floor(diff / 3600000);
-  const minutes = Math.floor((diff % 3600000) / 60000);
-  
-  document.getElementById('daily-timer').textContent = 
-    `Next word in: ${hours}h ${minutes}m`;
-}
 
 function initGame() {
     // Select a random word
@@ -97,7 +77,6 @@ function initGame() {
     
     // Add event listeners
     document.addEventListener("keydown", handleKeyDown);
-    restartBtn.addEventListener("click", initGame);
 }
 
 function createKeyboard() {
@@ -228,14 +207,14 @@ function submitGuess() {
         copyContainer.className = 'copy-results-container';
   
         const copyBtn = document.createElement('button');
-        copyBtn.textContent = 'Copy Results';
-        copyBtn.className = 'copy-results-btn';
-        copyBtn.addEventListener('click', copyResultsToClipboard);
-        
-        copyContainer.appendChild(copyBtn);
-        
-        // Insert after the game board
-        board.parentNode.insertBefore(copyContainer, board.nextSibling);
+    copyBtn.textContent = 'Copy Results';
+    copyBtn.className = 'copy-results-btn';
+    copyBtn.addEventListener('click', copyResultsToClipboard);
+    
+    copyContainer.appendChild(copyBtn);
+    
+    // Insert after the game board
+    board.parentNode.insertBefore(copyContainer, board.nextSibling);
 
     } else if (guesses.length === 6) {
         messageEl.textContent = `Verloren! Das Wort war ${targetWord.toUpperCase()}`;
