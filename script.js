@@ -275,35 +275,67 @@ function updateKeyboard() {
         }
     }
 }
-// Function to copy results
-function copyResultsToClipboard() {
+async function copyResultsToClipboard() {
     const resultString = generateResultString();
+    const copyBtn = document.querySelector('.copy-results-btn');
     
-    navigator.clipboard.writeText(resultString).then(() => {
-      const copyBtn = document.querySelector('.copy-btn');
-      copyBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy Results';
-      }, 2000);
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
-      // Fallback for older browsers
-      const textarea = document.createElement('textarea');
-      textarea.value = generateResultString();
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      
-      const copyBtn = document.querySelector('.copy-btn');
-      copyBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy Results';
-      }, 2000);
-    });
+    try {
+      // Try modern Clipboard API first
+      await navigator.clipboard.writeText(resultString);
+      showCopyFeedback(copyBtn);
+    } catch (err) {
+      console.error('Clipboard API failed, trying fallback:', err);
+      // Fallback method
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = resultString;
+        textarea.style.position = 'fixed';  // Prevent scrolling
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        
+        // Use modern selection API
+        const range = document.createRange();
+        range.selectNodeContents(textarea);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        // Try deprecated execCommand as last resort
+        const success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        
+        if (success) {
+          showCopyFeedback(copyBtn);
+        } else {
+          throw new Error('Fallback copy failed');
+        }
+      } catch (fallbackErr) {
+        console.error('All copy methods failed:', fallbackErr);
+        copyBtn.textContent = 'Failed to copy';
+        copyBtn.classList.add('error');
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy Results';
+          copyBtn.classList.remove('error');
+        }, 2000);
+        
+        // Last resort - show text to copy manually
+        alert('Could not copy automatically. Please copy this text:\n\n' + resultString);
+      }
+    }
   }
   
-  // Generate shareable result string
+  // Helper function for visual feedback
+function showCopyFeedback(button) {
+    button.textContent = 'Copied!';
+    button.classList.add('copied');
+    setTimeout(() => {
+      button.textContent = 'Copy Results';
+      button.classList.remove('copied');
+    }, 2000);
+  }
+  
+  // Generate shareable result
 function generateResultString() {
     const title = `Wordle de ${getESTDateKey()} - ${guesses.length}/6\n`;
     const grid = guesses.map(guess => {
@@ -315,7 +347,7 @@ function generateResultString() {
     }).join('\n');
     
     return `${title}${grid}\n\nPlay at: ${window.location.href}`;
-}
+  }
 
 // Start the game
 initGame();
